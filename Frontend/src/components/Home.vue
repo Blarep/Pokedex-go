@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <div class="container">
     <v-tabs
       v-model="defaultTab"
       grow>
@@ -29,24 +29,28 @@
         </div>
       </v-window-item>
     </v-window>
-  </v-container>
+  </div>
 </template>
 
 <script>
   import PokimonCard from './PokimonCard.vue';
   import jsonData from '../mocks/pokedex.json';
-  import { useGenStore } from '@/store/genStore'
+  import { useGenStore } from '@/store/genStore';
+  import { useDataStore } from '@/store/dataStore';
+
   export default {
     components: {
       PokimonCard,
     },
     data() {
       return {
-        genStore : useGenStore(),
+        genStore: useGenStore(),
+        dataStore: useDataStore(),
         defaultTab: 'Normal',
         tabs: [
           'Normal', 'Shiny', 'Oscuro', 'Purificado', 'Con suerte'
         ],
+        fullList: [],
         primera: [], segunda: [], tercera: [], cuarta: [], quinta: [], sexta: [],
         septima: [], octava: [], novena: [], megas: [],
         gen: 1,
@@ -54,16 +58,7 @@
     },
     computed: {
       pokemonList() {
-        this.primera = jsonData.filter((item) => item.id <= 151);
-        this.segunda = jsonData.filter((item) => item.id >= 152 && item.id <= 251);
-        this.tercera = jsonData.filter((item) => item.id >= 252 && item.id <= 386);
-        this.cuarta = jsonData.filter((item) => item.id >= 387 && item.id <= 493);
-        this.quinta = jsonData.filter((item) => item.id >= 494 && item.id <= 649);
-        this.sexta = jsonData.filter((item) => item.id >= 650 && item.id <= 721);
-        this.septima = jsonData.filter((item) => item.id >= 722 && item.id <= 809);
-        this.octava = jsonData.filter((item) => item.id >= 810 && item.id <= 905);
-        this.novena = jsonData.filter((item) => item.id >= 906 && item.id <= 1025);
-        this.megas = jsonData.filter((item) => item.name.includes("-mega") || item.name.includes("-primal"));
+        this.filterGens();
         switch (this.genStore.getGen()) {
           case 1:
             return this.primera;
@@ -88,17 +83,39 @@
           default:
             return this.primera;
         }
+      },
+    },
+    mounted() {
+      this.dataStore.setListData(jsonData);
+      this.fullList = this.dataStore.getListData();
+    },
+    methods: {
+      filterGens() {
+        this.primera = this.fullList.filter((item) => item.id <= 151);
+        this.segunda = this.fullList.filter((item) => item.id >= 152 && item.id <= 251);
+        this.tercera = this.fullList.filter((item) => item.id >= 252 && item.id <= 386);
+        this.cuarta = this.fullList.filter((item) => item.id >= 387 && item.id <= 493);
+        this.quinta = this.fullList.filter((item) => item.id >= 494 && item.id <= 649);
+        this.sexta = this.fullList.filter((item) => item.id >= 650 && item.id <= 721);
+        this.septima = this.fullList.filter((item) => item.id >= 722 && item.id <= 809);
+        this.octava = this.fullList.filter((item) => item.id >= 810 && item.id <= 905);
+        this.novena = this.fullList.filter((item) => item.id >= 906 && item.id <= 1025);
+        this.megas = this.fullList.filter((item) => item.name.includes("-mega") || item.name.includes("-primal"));
       }
-    }
+    },
   }
 </script>
 
 <style>
-.pokemonList{
+.container {
+  padding-top: 20px
+}
+.pokemonList {
   display: flex;
   flex-direction: row;
   justify-content: center;
   flex-wrap: wrap;
+  padding: 10px;
 }
 
 .test {
