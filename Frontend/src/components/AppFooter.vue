@@ -1,20 +1,43 @@
 <template>
-  <v-footer height="40" app>
-    <v-btn
+  <v-footer
+    class="filesButtons"
+    height="40"
+    app>
+    <v-btn-group
+      class="btnGroup">
+      <v-btn
       @click="this.changeGen(item.id)"
       v-for="item in this.items"
       :key="item.title"
       :icon="item.icon"
       :title="item.title"
       density="compact"/>
+    </v-btn-group>
+    <v-btn-group
+      class="btnGroup">
+      <v-btn
+        @click="this.uploadData"
+        key="Cargar datos"
+        icon="mdi-upload"
+        title="Cargar datos"
+        density="compact"/>
+      <v-btn
+        @click="this.downloadData"
+        key="Descargar datos"
+        icon="mdi-content-save"
+        title="Descargar datos"
+        density="compact"/>
+    </v-btn-group>
   </v-footer>
 </template>
 
 <script>
-import { useGenStore } from '@/store/genStore'
+import { useGenStore } from '@/store/genStore';
+import { useDataStore } from '@/store/dataStore';
   export default {
     data() {
       return {
+        dataStore: useDataStore(),
         genStore: useGenStore(),
         items: [
           {
@@ -71,20 +94,26 @@ import { useGenStore } from '@/store/genStore'
       }
     },
     methods:{
-      changeGen(selectedGen){
+      changeGen(selectedGen) {
         this.genStore.setGen(selectedGen);
-      }
+      },
+      uploadData() {
+        console.log('upload');
+      },
+      downloadData() {
+        this.dataStore.downloadData();
+      },
     },
   }
 
 </script>
 
-<style scoped lang="sass">
-  .social-link :deep(.v-icon)
-    color: rgba(var(--v-theme-on-background), var(--v-disabled-opacity))
-    text-decoration: none
-    transition: .2s ease-in-out
-
-    &:hover
-      color: rgba(25, 118, 210, 1)
+<style>
+.filesButtons {
+  display: flex;
+  justify-content: space-between;
+}
+.btnGroup {
+  height: 40px !important;
+}
 </style>

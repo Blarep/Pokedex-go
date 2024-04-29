@@ -2,7 +2,7 @@
     {
         "id": 1,
         "name": "bulbasaur",
-        "captured": true,
+        "captured": false,
         "shiny": false,
         "dark": false,
         "purified": false,
@@ -11,11 +11,11 @@
     {
         "id": 2,
         "name": "ivysaur",
-        "captured": true,
-        "shiny": true,
-        "dark": true,
-        "purified": true,
-        "lucky": true
+        "captured": false,
+        "shiny": false,
+        "dark": false,
+        "purified": false,
+        "lucky": false
     },
     {
         "id": 3,
@@ -24,13 +24,13 @@
         "shiny": false,
         "dark": false,
         "purified": false,
-        "lucky": true
+        "lucky": false
     },
     {
         "id": 4,
         "name": "charmander",
         "captured": false,
-        "shiny": true,
+        "shiny": false,
         "dark": false,
         "purified": false,
         "lucky": false
