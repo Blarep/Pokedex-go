@@ -98,7 +98,7 @@ import { useDataStore } from '@/store/dataStore';
         this.genStore.setGen(selectedGen);
       },
       uploadData() {
-        console.log('upload');
+        console.log('upload owo');
       },
       downloadData() {
         this.dataStore.downloadData();
