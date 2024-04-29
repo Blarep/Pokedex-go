@@ -16,11 +16,16 @@
     <v-btn-group
       class="btnGroup">
       <v-btn
-        @click="this.uploadData"
         key="Cargar datos"
-        icon="mdi-upload"
         title="Cargar datos"
-        density="compact"/>
+        density="compact">
+        <input 
+          type="file"
+          id="json"
+          ref="uploadedJson"
+          @change="this.uploadData"
+          accept="application/json">
+      </v-btn>
       <v-btn
         @click="this.downloadData"
         key="Descargar datos"
@@ -37,6 +42,8 @@ import { useDataStore } from '@/store/dataStore';
   export default {
     data() {
       return {
+        reader: '',
+        jsonUpladed: '',
         dataStore: useDataStore(),
         genStore: useGenStore(),
         items: [
@@ -97,8 +104,20 @@ import { useDataStore } from '@/store/dataStore';
       changeGen(selectedGen) {
         this.genStore.setGen(selectedGen);
       },
-      uploadData() {
-        console.log('upload owo');
+      uploadData(event) {
+        const file = event.target.files[0];
+        if (file.type !== 'application/json' || !file) {
+          alert('Por favor selecciona un archivo JSON.');
+          return;
+        }
+        const reader = new FileReader();
+        reader.onload = () => {
+          const jsonContent = JSON.parse(reader.result);
+          jsonContent.forEach((pokemon) => {
+            this.dataStore.replacePokemonData(pokemon);
+          });
+        };
+        reader.readAsText(file);
       },
       downloadData() {
         this.dataStore.downloadData();

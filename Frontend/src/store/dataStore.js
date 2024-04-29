@@ -18,7 +18,6 @@ export const useDataStore = defineStore('data', {
     downloadData(){
       let blob = new Blob([JSON.stringify(this.data)], {type: "text/plain;charset=utf-8"});
       saveAs(blob, "Pokédex.json");
-      console.log("owo");
     },
   }
 });
