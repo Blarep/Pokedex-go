@@ -13,6 +13,9 @@
       :title="item.title"
       density="compact"/>
     </v-btn-group>
+    <v-btn @click="toggleAllPokemon" title="Marcar/Desmarcar Todos" density="compact">
+    Marcar/Desmarcar Todos
+    </v-btn>
     <v-btn-group
       class="btnGroup">
       <v-btn
@@ -121,6 +124,19 @@ import { useDataStore } from '@/store/dataStore';
       },
       downloadData() {
         this.dataStore.downloadData();
+      },
+      toggleAllPokemon() {
+        // Obtén la lista de Pokémon de la generación actual
+        const pokemonList = this.dataStore.getListData();
+        
+        // Verifica si hay al menos un Pokémon sin capturar
+        const atLeastOneNotCaptured = pokemonList.some(pokemon => !pokemon.captured);
+        
+        // Si al menos uno no está capturado, marca todos; de lo contrario, desmarca todos
+        pokemonList.forEach(pokemon => {
+          pokemon.captured = atLeastOneNotCaptured;
+        });
+        this.dataStore.setListData(pokemonList);
       },
     },
   }
