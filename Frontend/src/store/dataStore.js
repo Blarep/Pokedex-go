@@ -13,7 +13,11 @@ export const useDataStore = defineStore('data', {
       return this.data;
     },
     replacePokemonData(pokemonData){
-      this.data[pokemonData.id - 1] = pokemonData;
+      if (pokemonData.id < 10000) {
+        this.data[pokemonData.id - 1] = pokemonData;
+      } else {
+        this.data[pokemonData.id - 8976] = pokemonData;
+      }
     },
     downloadData(){
       let blob = new Blob([JSON.stringify(this.data)], {type: "text/plain;charset=utf-8"});

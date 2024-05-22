@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 
 export const useGenStore = defineStore('gen', {
   state: () => ({
-    gen: [],
+    gen: 1,
   }),
   actions: {
     setGen(selectedGen) {

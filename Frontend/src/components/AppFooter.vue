@@ -13,7 +13,7 @@
       :title="item.title"
       density="compact"/>
     </v-btn-group>
-    <v-btn @click="toggleAllPokemon" title="Marcar/Desmarcar Todos" density="compact">
+    <v-btn @click="toggleAllPokemon()" title="Marcar/Desmarcar Todos" density="compact">
     Marcar/Desmarcar Todos
     </v-btn>
     <v-btn-group
@@ -42,6 +42,7 @@
 <script>
 import { useGenStore } from '@/store/genStore';
 import { useDataStore } from '@/store/dataStore';
+import { useTabStore } from '@/store/tabStore'; 
   export default {
     data() {
       return {
@@ -49,6 +50,7 @@ import { useDataStore } from '@/store/dataStore';
         jsonUpladed: '',
         dataStore: useDataStore(),
         genStore: useGenStore(),
+        tabStore: useTabStore(),
         items: [
           {
             id: 1,
@@ -128,15 +130,45 @@ import { useDataStore } from '@/store/dataStore';
       toggleAllPokemon() {
         // Obtén la lista de Pokémon de la generación actual
         const pokemonList = this.dataStore.getListData();
-        
+        const primera = pokemonList.filter((item) => item.id <= 151);
+        const segunda = pokemonList.filter((item) => item.id >= 152 && item.id <= 251);
+        const tercera = pokemonList.filter((item) => item.id >= 252 && item.id <= 386);
+        const cuarta = pokemonList.filter((item) => item.id >= 387 && item.id <= 493);
+        const quinta = pokemonList.filter((item) => item.id >= 494 && item.id <= 649);
+        const sexta = pokemonList.filter((item) => item.id >= 650 && item.id <= 721);
+        const septima = pokemonList.filter((item) => item.id >= 722 && item.id <= 809);
+        const octava = pokemonList.filter((item) => item.id >= 810 && item.id <= 905);
+        const novena = pokemonList.filter((item) => item.id >= 906 && item.id <= 1025);
+        const megas = pokemonList.filter((item) => item.name.includes("-mega") || item.name.includes("-primal"));
+        const currentGen = this.genStore.getGen();
+        const currentTab = this.tabStore.getTab();
+        const tabMap = {
+          'Normal' : 'captured',
+          'Shiny' : 'shiny',
+          'Oscuro': 'dark',
+          'Purificado': 'purified',
+          'Con suerte': 'lucky',
+        }; 
+        const genMap = {
+          1: primera,
+          2: segunda,
+          3: tercera,
+          4: cuarta,
+          5: quinta,
+          6: sexta,
+          7: septima,
+          8: octava,
+          9: novena,
+          10: megas,
+        };
         // Verifica si hay al menos un Pokémon sin capturar
-        const atLeastOneNotCaptured = pokemonList.some(pokemon => !pokemon.captured);
+        const atLeastOneNotCaptured = genMap[currentGen].some(pokemon => !pokemon[tabMap[currentTab]]);
         
         // Si al menos uno no está capturado, marca todos; de lo contrario, desmarca todos
-        pokemonList.forEach(pokemon => {
-          pokemon.captured = atLeastOneNotCaptured;
+        genMap[currentGen].forEach(pokemon => {
+          pokemon[tabMap[currentTab]] = atLeastOneNotCaptured;
         });
-        this.dataStore.setListData(pokemonList);
+        //this.dataStore.setListData(genMap[currentGen]);
       },
     },
   }

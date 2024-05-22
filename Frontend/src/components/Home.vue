@@ -6,7 +6,8 @@
       <v-tab
         v-for="tab in tabs"
         :key="tab"
-        :value="tab">
+        :value="tab"
+        @click="saveTab(tab)">
         {{ tab }}
       </v-tab>
     </v-tabs>
@@ -37,6 +38,7 @@
   import jsonData from '../mocks/pokedex.json';
   import { useGenStore } from '@/store/genStore';
   import { useDataStore } from '@/store/dataStore';
+  import { useTabStore } from '@/store/tabStore';
 
   export default {
     components: {
@@ -46,6 +48,7 @@
       return {
         genStore: useGenStore(),
         dataStore: useDataStore(),
+        tabStore: useTabStore(),
         defaultTab: 'Normal',
         tabs: [
           'Normal', 'Shiny', 'Oscuro', 'Purificado', 'Con suerte'
@@ -59,33 +62,23 @@
     computed: {
       pokemonList() {
         this.filterGens();
-        switch (this.genStore.getGen()) {
-          case 1:
-            return this.primera;
-          case 2:
-            return this.segunda;
-          case 3:
-            return this.tercera;
-          case 4:
-            return this.cuarta;
-          case 5:
-            return this.quinta;
-          case 6:
-            return this.sexta;
-          case 7:
-            return this.septima;
-          case 8:
-            return this.octava;
-          case 9:
-            return this.novena;
-          case 10:
-            return this.megas;
-          default:
-            return this.primera;
-        }
+        const genMap = {
+          1: this.primera,
+          2: this.segunda,
+          3: this.tercera,
+          4: this.cuarta,
+          5: this.quinta,
+          6: this.sexta,
+          7: this.septima,
+          8: this.octava,
+          9: this.novena,
+          10: this.megas,
+        };
+        return genMap[this.genStore.getGen()];
       },
     },
     mounted() {
+      console.log("El maty se la come, suscribanse con Twitch prime a AlexElCapo");
       this.dataStore.setListData(jsonData);
       this.fullList = this.dataStore.getListData();
     },
@@ -101,6 +94,9 @@
         this.octava = this.fullList.filter((item) => item.id >= 810 && item.id <= 905);
         this.novena = this.fullList.filter((item) => item.id >= 906 && item.id <= 1025);
         this.megas = this.fullList.filter((item) => item.name.includes("-mega") || item.name.includes("-primal"));
+      },
+      saveTab(selectedTab) {
+        this.tabStore.setTab(selectedTab);
       }
     },
   }
