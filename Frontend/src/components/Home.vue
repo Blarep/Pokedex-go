@@ -79,7 +79,9 @@
     },
     mounted() {
       console.log("El maty se la come, suscribanse con Twitch prime a AlexElCapo");
-      this.dataStore.setListData(jsonData);
+      if (this.dataStore.getListData().length === 0) {
+        this.dataStore.setListData(jsonData);
+      }
       this.fullList = this.dataStore.getListData();
     },
     methods: {

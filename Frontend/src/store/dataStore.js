@@ -1,6 +1,18 @@
 import { defineStore } from 'pinia';
 import { saveAs } from 'file-saver';
 
+// Plugin para guardar el estado en localStorage
+export const persistStatePlugin = (context) => {
+  const storedState = localStorage.getItem(context.store.$id);
+  if (storedState) {
+    context.store.$patch(JSON.parse(storedState));
+  }
+
+  context.store.$subscribe((mutation, state) => {
+    localStorage.setItem(context.store.$id, JSON.stringify(state));
+  });
+}
+
 export const useDataStore = defineStore('data', {
   state: () => ({
     data: [],
@@ -23,5 +35,6 @@ export const useDataStore = defineStore('data', {
       let blob = new Blob([JSON.stringify(this.data)], {type: "text/plain;charset=utf-8"});
       saveAs(blob, "Pokédex.json");
     },
+    plugins: [persistStatePlugin]
   }
 });

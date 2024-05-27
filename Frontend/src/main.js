@@ -6,6 +6,7 @@
 
 // Plugins
 import { registerPlugins } from '@/plugins'
+import { persistStatePlugin } from './store/dataStore'
 
 // Components
 import App from './App.vue'
@@ -17,6 +18,8 @@ import { createPinia } from 'pinia'
 const pinia = createPinia()
 
 const app = createApp(App)
+pinia.use(persistStatePlugin)
+
 
 registerPlugins(app)
 
