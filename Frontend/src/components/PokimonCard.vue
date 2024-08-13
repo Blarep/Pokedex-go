@@ -3,6 +3,7 @@
     @click="this.pressPokemon"
     class="pokemonCard"
     :style="{
+      display: this.showPokimon ? 'block' : 'none' ,
       border: this.getBorder,
       width: this.isMega ? '220px' : '180px',
       height: this.isMega ? '250px' : '210px'}">
@@ -14,6 +15,7 @@
 </template>
   
 <script>
+import { useFilterStore } from '@/store/filterStore';
 import { useDataStore } from '@/store/dataStore';
 export default {
   props: {
@@ -29,12 +31,52 @@ export default {
   data: () => ({
     jsonToChange: {},
     dataStore: useDataStore(),
+    filterStore: useFilterStore(),
     exceptions: ['ho-oh', 'chi-yu', 'chien-pao', 'hakamo-o', 'jangmo-o', 'kommo-o', 'porygon-z', 'ting-lu', 'wo-chien'],
     imgUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/',
   }),
   computed: {
     isMega() {
       return this.name.includes('-mega') || this.name.includes('-primal');
+    },
+    filter() {
+      return this.filterStore.getFilter();
+    },  
+    showPokimon() {
+      if (this.filter == 'All') {
+        return true;
+      }
+      if (this.filter == 'Obtained') {
+        if (this.tab == 'Normal' && this.captured) {
+          return true; 
+        } else if (this.tab == 'Shiny' && this.shiny) {
+          return true; 
+        } else if (this.tab == 'Oscuro' && this.dark) {
+          return true; 
+        } else if (this.tab == 'Purificado' && this.purified) {
+          return true; 
+        } else if (this.tab == 'Con suerte' && this.lucky) {
+          return true; 
+        } else {
+          return false;
+        }
+      }
+      if (this.filter == 'Missing') {
+        if (this.tab == 'Normal' && !this.captured) {
+          return true; 
+        } else if (this.tab == 'Shiny' && !this.shiny) {
+          return true; 
+        } else if (this.tab == 'Oscuro' && !this.dark) {
+          return true; 
+        } else if (this.tab == 'Purificado' && !this.purified) {
+          return true; 
+        } else if (this.tab == 'Con suerte' && !this.lucky) {
+          return true; 
+        } else {
+          return false;
+        }
+      }
+     
     },
     getBorder() {
       if (this.tab == 'Normal' && this.captured) {

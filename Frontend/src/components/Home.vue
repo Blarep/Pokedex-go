@@ -50,6 +50,7 @@
         dataStore: useDataStore(),
         tabStore: useTabStore(),
         defaultTab: 'Normal',
+        defaultFilter: 'All',
         tabs: [
           'Normal', 'Shiny', 'Oscuro', 'Purificado', 'Con suerte'
         ],

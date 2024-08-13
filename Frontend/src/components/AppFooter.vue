@@ -16,6 +16,11 @@
     <v-btn @click="toggleAllPokemon()" title="Marcar/Desmarcar Todos" density="compact">
     Marcar/Desmarcar Todos
     </v-btn>
+    <v-btn-group>
+      <v-btn @click="setFilter('All')" density="compact">Mostrar Todos</v-btn>
+      <v-btn @click="setFilter('Obtained')" density="compact">Obtenidos</v-btn>
+      <v-btn @click="setFilter('Missing')" density="compact">Faltantes</v-btn>
+    </v-btn-group>
     <v-btn-group
       class="btnGroup">
       <v-btn
@@ -43,6 +48,8 @@
 import { useGenStore } from '@/store/genStore';
 import { useDataStore } from '@/store/dataStore';
 import { useTabStore } from '@/store/tabStore'; 
+import { useFilterStore } from '@/store/filterStore'; 
+
   export default {
     data() {
       return {
@@ -51,6 +58,7 @@ import { useTabStore } from '@/store/tabStore';
         dataStore: useDataStore(),
         genStore: useGenStore(),
         tabStore: useTabStore(),
+        filterStore: useFilterStore(),
         items: [
           {
             id: 1,
@@ -170,6 +178,9 @@ import { useTabStore } from '@/store/tabStore';
         });
         //this.dataStore.setListData(genMap[currentGen]);
       },
+      setFilter(selectedFilter) {
+        this.filterStore.setFilter(selectedFilter);
+      }
     },
   }
 
