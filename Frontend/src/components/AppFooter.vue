@@ -16,11 +16,14 @@
     <v-btn @click="toggleAllPokemon()" title="Marcar/Desmarcar Todos" density="compact">
     Marcar/Desmarcar Todos
     </v-btn>
-    <v-btn-group>
-      <v-btn @click="setFilter('All')" density="compact">Mostrar Todos</v-btn>
-      <v-btn @click="setFilter('Obtained')" density="compact">Obtenidos</v-btn>
-      <v-btn @click="setFilter('Missing')" density="compact">Faltantes</v-btn>
-    </v-btn-group>
+    <div class="filter-buttons" display="flex"
+  align-items="center"
+  gap="10px" >
+        <span class="mr-2 text-body-2 font-weight-medium">MOSTRAR:</span>
+        <v-btn @click="setFilter('All')">Todos</v-btn>
+        <v-btn @click="setFilter('Obtained')">Obtenidos</v-btn>
+        <v-btn @click="setFilter('Missing')">Faltantes</v-btn>
+      </div>
     <v-btn-group
       class="btnGroup">
       <v-btn
@@ -40,11 +43,19 @@
         icon="mdi-content-save"
         title="Descargar datos"
         density="compact"/>
+      <v-btn
+      @click="this.downloadDataTXT"
+        key="Descargar txt"
+        icon="mdi-file-document-outline"
+        title="Descargar txt"
+        density="compact"/>
     </v-btn-group>
   </v-footer>
 </template>
 
 <script>
+
+
 import { useGenStore } from '@/store/genStore';
 import { useDataStore } from '@/store/dataStore';
 import { useTabStore } from '@/store/tabStore'; 
@@ -134,6 +145,9 @@ import { useFilterStore } from '@/store/filterStore';
       },
       downloadData() {
         this.dataStore.downloadData();
+      },
+      downloadDataTXT() {
+        this.dataStore.downloadDataTXT();
       },
       toggleAllPokemon() {
         // Obtén la lista de Pokémon de la generación actual

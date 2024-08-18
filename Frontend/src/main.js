@@ -7,6 +7,7 @@
 // Plugins
 import { registerPlugins } from '@/plugins'
 import { persistStatePlugin } from './store/dataStore'
+import VueGtag from 'vue-gtag-next'
 
 // Components
 import App from './App.vue'
@@ -22,6 +23,13 @@ pinia.use(persistStatePlugin)
 
 
 registerPlugins(app)
+
+// Configuración de Google Analytics
+app.use(VueGtag, {
+    property: {
+        id: 'G-6DDKC9NEN2' // Reemplaza con tu ID de Google Analytics
+    }
+  })
 
 app.use(pinia)
 app.mount('#app')

@@ -39,8 +39,15 @@
   import { useGenStore } from '@/store/genStore';
   import { useDataStore } from '@/store/dataStore';
   import { useTabStore } from '@/store/tabStore';
+  import { useFilterStore } from '@/store/filterStore';
 
   export default {
+    setup() {
+      const filterStore = useFilterStore();
+      return {
+        filterStore,
+      };
+    },
     components: {
       PokimonCard,
     },
@@ -75,7 +82,17 @@
           9: this.novena,
           10: this.megas,
         };
-        return genMap[this.genStore.getGen()];
+        let filteredList = genMap[this.genStore.getGen()];
+    
+        // Aplicar filtro
+        const currentFilter = this.filterStore.getFilter();
+        if (currentFilter === 'Obtained') {
+          filteredList = filteredList.filter(pokemon => pokemon.captured);
+        } else if (currentFilter === 'Missing') {
+          filteredList = filteredList.filter(pokemon => !pokemon.captured);
+        }
+        
+        return filteredList;
       },
     },
     mounted() {
@@ -84,6 +101,7 @@
         this.dataStore.setListData(jsonData);
       }
       this.fullList = this.dataStore.getListData();
+      this.filterStore.setFilter('All');
     },
     methods: {
       filterGens() {
