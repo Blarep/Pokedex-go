@@ -84,14 +84,22 @@
         };
         let filteredList = genMap[this.genStore.getGen()];
     
-        // Aplicar filtro
-        const currentFilter = this.filterStore.getFilter();
-        if (currentFilter === 'Obtained') {
-          filteredList = filteredList.filter(pokemon => pokemon.captured);
-        } else if (currentFilter === 'Missing') {
-          filteredList = filteredList.filter(pokemon => !pokemon.captured);
+        const currentTab = this.tabStore.getTab(); // Suponiendo que tienes un método o variable para obtener la pestaña activa
+        const filterAttribute = {
+          'Normal': 'captured',
+          'Shiny': 'shiny',
+          'Oscuro': 'dark',
+          'Purificado': 'purified',
+          'Con suerte': 'lucky',
+        }[currentTab];
+        if (filterAttribute) {
+          const currentFilter = this.filterStore.getFilter();
+          if (currentFilter === 'Obtained') {
+            filteredList = filteredList.filter(pokemon => pokemon[filterAttribute]);
+          } else if (currentFilter === 'Missing') {
+            filteredList = filteredList.filter(pokemon => !pokemon[filterAttribute]);
+          }
         }
-        
         return filteredList;
       },
     },
